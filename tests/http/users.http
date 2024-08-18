@@ -1,0 +1,21 @@
+@baseUrl = http://localhost:5000
+
+POST {{baseUrl}}/users
+content-type: application/json
+Authorization: Barear xxx
+
+{
+    "name": "John Doe 2",
+    "email": "john@example 2.com"
+}
+
+###
+
+GET {{baseUrl}}/users
+Content-Type: application/json
+
+###
+
+DELETE {{baseUrl}}/users/4055457a-56ea-4567-9f6b-55b7f3d48921
+Content-Type: application/json
+
