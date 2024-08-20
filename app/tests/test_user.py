@@ -78,17 +78,25 @@ class UserTestCase(unittest.TestCase):
         updated_user = db.session.query(UserModel).filter_by(id=user.id).first()
         self.assertEqual(updated_user.name, 'Jane Doe')
 
-    # def test_delete_user(self):
-    #     """Test deleting a user"""
-    #     user = UserModel(name='John Doe', email='john.doe@example.com')
-    #     db.session.add(user)
-    #     db.session.commit()
+    def test_delete_user(self):
+        """Test deleting a user"""
+        user = UserModel(name='John Doe', email='john.doe@example.com')
+        db.session.add(user)
+        db.session.commit()
 
-    #     response = self.client.delete(f'/users/{user.id}')
-    #     self.assertEqual(response.status_code, 200)
+        response = self.client.delete(f'/users/{user.id}')
+        self.assertEqual(response.status_code, 200)
 
-    #     deleted_user = UserModel.query.get(user.id)
-    #     self.assertIsNone(deleted_user)
+        deleted_user = db.session.query(UserModel).filter_by(id=user.id).first()
+        self.assertIsNone(deleted_user)
+
+    def test_delete_user_not_found(self):
+        """Test deleting a user not found"""
+        response = self.client.delete('/users/123')
+        obj = json.loads(str(response.data.decode('utf-8')))
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(obj['code'], 'USER_NOT_FOUND')
 
 if __name__ == '__main__':
     unittest.main()

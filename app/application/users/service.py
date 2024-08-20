@@ -1,4 +1,4 @@
-from app.domain.users.exceptions import UnexpectedError, UserNameCannotBeEmpty, UserEmailNotValid
+from app.domain.users.exceptions import UnexpectedError, UserNameCannotBeEmpty, UserEmailNotValid, UserNotFound
 from app.application.users.repository import IUserRepository
 from app.application.users.dto import UserDto
 
@@ -43,4 +43,15 @@ class UserService(object):
             raise err
         except Exception as err:
             print(err)
+            raise UnexpectedError()
+
+    def delete(self, id: str):
+        try:
+            if self.repository.exists(id) is False:
+                print('User not found')
+                raise UserNotFound()
+            return self.repository.delete(id)
+        except UserNotFound as err:
+            raise err
+        except Exception as err:
             raise UnexpectedError()

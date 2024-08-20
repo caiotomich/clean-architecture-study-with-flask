@@ -54,3 +54,14 @@ def update(id):
         }), 200
     except Exception as err:
         return jsonify({"message": err.message, "code": err.code}), 400
+
+@user_controller.route('/users/<string:id>', methods=['DELETE'])
+def delete(id):
+    try:
+        service = UserService(UserRepository())
+        service.delete(id)
+        return jsonify({}), 200
+    except Exception as err:
+        if err.code == 'USER_NOT_FOUND':
+            return jsonify({"message": err.message, "code": err.code}), 404
+        return jsonify({"message": err.message, "code": err.code}), 400
