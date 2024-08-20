@@ -1,4 +1,6 @@
-from app.infrastructure.api import create_app
+from app.config.development import DevelopmentConfig
+from app.config.production import ProductionConfig
+from app.infrastructure.api.api import create_app
 from dotenv import load_dotenv
 import os
 
@@ -6,7 +8,11 @@ import os
 load_dotenv()
 
 # Create an instance of the Flask application
-app = create_app()
+Config = DevelopmentConfig \
+    if os.getenv('FLASK_ENV') == 'development' \
+    else ProductionConfig
+
+app = create_app(Config)
 
 if __name__ == '__main__':
     # Run the application on the default port (5000) or a port specified by an environment variable

@@ -1,24 +1,15 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from app.config.development import DevelopmentConfig
-from app.config.production import ProductionConfig
-import os
+from app.infrastructure.database import db
 
-db = SQLAlchemy()
-
-def create_app():
+def create_app(Config):
     app = Flask(__name__)
-
-    Config = DevelopmentConfig \
-        if os.getenv('FLASK_ENV') == 'development' \
-        else ProductionConfig
 
     app.config.from_object(Config)
 
     db.init_app(app)
 
     # Import and register blueprints or routes
-    from app.domain.entities.user.controller import user_controller
+    from app.infrastructure.api.controllers.users import user_controller
     app.register_blueprint(user_controller)
 
     with app.app_context():
