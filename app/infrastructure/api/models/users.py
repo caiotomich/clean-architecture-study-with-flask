@@ -1,7 +1,7 @@
 from app.infrastructure.database import db
 import uuid
 
-class User(db.Model):
+class UserModel(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))

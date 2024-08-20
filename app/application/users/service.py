@@ -1,6 +1,6 @@
 from app.domain.users.exceptions import UnexpectedError, UserNameCannotBeEmpty, UserEmailNotValid
 from app.application.users.repository import IUserRepository
-from app.application.users.dto import UserCreateDto
+from app.application.users.dto import UserDto
 
 class UserService(object):
     repository: IUserRepository
@@ -17,16 +17,30 @@ class UserService(object):
     #         return user
     #     return None
 
-    def create(self, userDto: UserCreateDto):
-        user = userDto.to_entity()
-
+    def create(self, userDto: UserDto):
         try:
+            user = userDto.to_entity()
             if user.validated():
-                print("User is valid")
                 return self.repository.create(user)
         except UserNameCannotBeEmpty as err:
             raise err
         except UserEmailNotValid as err:
             raise err
         except Exception as err:
+            raise UnexpectedError()
+
+    def update(self, userDto: UserDto):
+        try:
+            user = self.repository.get_one(userDto.id)
+            user.name = userDto.name if userDto.name else user.name
+            user.email = userDto.email if userDto.email else user.email
+
+            if user.validated():
+                return self.repository.update(user)
+        except UserNameCannotBeEmpty as err:
+            raise err
+        except UserEmailNotValid as err:
+            raise err
+        except Exception as err:
+            print(err)
             raise UnexpectedError()

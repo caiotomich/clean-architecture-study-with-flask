@@ -14,9 +14,9 @@ class IUserRepository(ABC):
     def create(self, name: str, email: str) -> User:
         ...
 
-    # @abstractmethod
-    # def update(self, id, name=None, email=None) -> User:
-    #     ...
+    @abstractmethod
+    def update(self, id, name=None, email=None) -> User:
+        ...
 
     # @abstractmethod
     # def delete(self, id) -> User:

@@ -1,6 +1,6 @@
 import unittest
 from app.infrastructure.api.api import create_app, db
-from app.infrastructure.api.models.users import User
+from app.infrastructure.api.models.users import UserModel
 from app.config.test import TestConfig
 from app.domain.users.enums import UserErrorMessagesEnum
 import json
@@ -56,7 +56,7 @@ class UserTestCase(unittest.TestCase):
     
     def test_get_user(self):
         """Test retrieving a user"""
-        user = User(name='John Doe', email='john.doe@example.com')
+        user = UserModel(name='John Doe', email='john.doe@example.com')
         db.session.add(user)
         db.session.commit()
 
@@ -64,19 +64,19 @@ class UserTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn('John Doe', str(response.data))
 
-    # def test_update_user(self):
-    #     """Test updating a user"""
-    #     user = User(name='John Doe', email='john.doe@example.com')
-    #     db.session.add(user)
-    #     db.session.commit()
+    def test_update_user(self):
+        """Test updating a user"""
+        user = UserModel(name='John Doe', email='john.doe@example.com')
+        db.session.add(user)
+        db.session.commit()
 
-    #     response = self.client.put(f'/users/{user.id}', json={
-    #         'name': 'Jane Doe'
-    #     })
-    #     self.assertEqual(response.status_code, 200)
+        response = self.client.put(f'/users/{user.id}', json={
+            'name': 'Jane Doe'
+        })
+        self.assertEqual(response.status_code, 200)
 
-    #     updated_user = User.query.get(user.id)
-    #     self.assertEqual(updated_user.name, 'Jane Doe')
+        updated_user = db.session.query(UserModel).filter_by(id=user.id).first()
+        self.assertEqual(updated_user.name, 'Jane Doe')
 
     # def test_delete_user(self):
     #     """Test deleting a user"""
