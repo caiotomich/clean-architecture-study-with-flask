@@ -1,7 +1,10 @@
 from flask import Blueprint, request, jsonify
 from app.infra.api.repositories.users import UserRepository
 from app.application.users.dto.create_dto import UserCreateDto
+from app.application.users.dto.update_dto import UserUpdateDto
+from app.application.users.dto.get_dto import UserGetDto
 from app.application.users.services.get_one import UserGetOne
+from app.application.users.services.get_all import UserGetAll
 from app.application.users.services.create import UserCreate
 from app.application.users.services.update import UserUpdate
 from app.application.users.services.delete import UserDelete
@@ -11,15 +14,12 @@ users_controller = Blueprint('users_controller', __name__)
 @users_controller.route('/users/<string:id>', methods=['GET'])
 def get_one(id):
     try:
-        user = UserGetOne(UserRepository()).execute(id)
-
-        return jsonify({
-            'id': user.id,
-            'name': user.name,
-            'email': user.email
-        }), 200
+        user = UserGetOne(UserRepository()).execute(id=id)
+        return jsonify(UserGetDto(user).data()), 200
     except Exception as err:
-        return jsonify({"message": err.message, "code": err.code}), 400
+        message = err.message if err.message else 'Error on create user'
+        code = err.code if err.code else 'UNEXPECTED_ERROR'
+        return jsonify({"message": message, "code": code}), 400
 
 @users_controller.route('/users', methods=['POST'])
 def create():
@@ -29,16 +29,26 @@ def create():
     password = data.get('password')
 
     try:
-        user_dto = UserCreateDto(name=name, email=email, password=password)
-        user = UserCreate(UserRepository()).execute(user_dto)
+        user_create = UserCreate(UserRepository())
+        user = user_create.execute(UserCreateDto(name=name, email=email, password=password))
 
-        return jsonify({
-            'id': user.id,
-            'name': user.name,
-            'email': user.email
-        }), 201
+        return jsonify(UserGetDto(user).data()), 201
     except Exception as err:
-        return jsonify({"message": err.message, "code": err.code}), 400
+        message = err.message if err.message else 'Error on create user'
+        code = err.code if err.code else 'UNEXPECTED_ERROR'
+        return jsonify({"message": message, "code": code}), 400
+
+@users_controller.route('/users', methods=['GET'])
+def get_all():
+    try:
+        users = UserGetAll(UserRepository()).execute()
+
+        return jsonify([UserGetDto(user).data() for user in users]), 200
+    except Exception as err:
+        message = err.message if err.message else 'Error on create user'
+        code = err.code if err.code else 'UNEXPECTED_ERROR'
+        return jsonify({"message": message, "code": code}), 400
+
 
 @users_controller.route('/users/<string:id>', methods=['PUT'])
 def update(id):
@@ -47,16 +57,15 @@ def update(id):
     email = data.get('email')
 
     try:
-        user_dto = UserCreateDto(id=id, name=name, email=email)
-        user = UserUpdate(UserRepository()).execute(user_dto)
+        user_dto = UserUpdateDto(id=id, name=name, email=email)
+        user_updated = UserUpdate(UserRepository()).execute(user_dto)
+        user = UserGetDto(user_updated).data()
 
-        return jsonify({
-            'id': user.id,
-            'name': user.name,
-            'email': user.email
-        }), 200
+        return jsonify(user), 200
     except Exception as err:
-        return jsonify({"message": err.message, "code": err.code}), 400
+        message = err.message if err.message else 'Error on create user'
+        code = err.code if err.code else 'UNEXPECTED_ERROR'
+        return jsonify({"message": message, "code": code}), 400
 
 @users_controller.route('/users/<string:id>', methods=['DELETE'])
 def delete(id):
@@ -64,6 +73,6 @@ def delete(id):
         UserDelete(UserRepository()).execute(id)
         return jsonify({}), 200
     except Exception as err:
-        if err.code == 'USER_NOT_FOUND':
-            return jsonify({"message": err.message, "code": err.code}), 404
-        return jsonify({"message": err.message, "code": err.code}), 400
+        message = err.message if err.message else 'Error on create user'
+        code = err.code if err.code else 'UNEXPECTED_ERROR'
+        return jsonify({"message": message, "code": code}), 400

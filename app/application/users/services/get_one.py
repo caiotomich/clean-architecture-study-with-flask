@@ -1,4 +1,6 @@
+from app.domain.entities.users.exceptions import UnexpectedError, UserNotFound
 from app.application.users.repository import IUserRepository
+from app.application.users.dto.get_dto import UserGetDto
 
 class UserGetOne:
     repository: IUserRepository
@@ -6,12 +8,12 @@ class UserGetOne:
     def __init__(self, repository: IUserRepository) -> None:
         self.repository = repository
 
-    @staticmethod
     def execute(self, id: str):
-        return self.repository.get_one(id)
-
-    # def get_all(self, user_id):
-    #     user = user_repository.get_user_by_id(user_id)
-    #     if user:
-    #         return user
-    #     return None
+        try:
+            if self.repository.exists(id) is False:
+                raise UserNotFound()
+            return self.repository.get_one(id)
+        except UserNotFound as err:
+            raise err
+        except Exception as err:
+            raise UnexpectedError()

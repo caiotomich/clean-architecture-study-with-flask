@@ -20,10 +20,10 @@ class UserNotFound(Exception):
         self.message = message if message else UserErrorMessagesEnum.USER_NOT_FOUND.value
         self.code = 'USER_NOT_FOUND'
 
-# class UsersAlreadyExists(Exception):
-#     def __init__(self, message=None):
-#         self.message = message if message else UserErrorMessagesEnum.USER_ALREADY_EXISTS.value
-#         self.code = 'USER_ALREADY_EXISTS'
+class UsersAlreadyExists(Exception):
+    def __init__(self, message=None):
+        self.message = message if message else UserErrorMessagesEnum.USER_ALREADY_EXISTS.value
+        self.code = 'USER_ALREADY_EXISTS'
 
 # class UserNotValid(Exception):
 #     def __init__(self, message=None):

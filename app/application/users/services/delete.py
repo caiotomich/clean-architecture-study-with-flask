@@ -7,11 +7,9 @@ class UserDelete:
     def __init__(self, repository: IUserRepository) -> None:
         self.repository = repository
 
-    @staticmethod
     def execute(self, id: str):
         try:
             if self.repository.exists(id) is False:
-                print('User not found')
                 raise UserNotFound()
             return self.repository.delete(id)
         except UserNotFound as err:

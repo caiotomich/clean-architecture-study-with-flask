@@ -6,18 +6,26 @@ class IUserRepository(ABC):
     def get_one(self, id: str) -> User:
         ...
 
-    # @abstractmethod
-    # def get_all(self) -> List[User]:
-    #     ...
-
     @abstractmethod
-    def create(self, name: str, email: str) -> User:
+    def get_all(self) -> list[User]:
         ...
 
     @abstractmethod
-    def update(self, id, name=None, email=None) -> User:
+    def create(self, name: str, email: str, password: str) -> User:
         ...
 
-    # @abstractmethod
-    # def delete(self, id) -> User:
-    #     ...
+    @abstractmethod
+    def update(self, user: User) -> User:
+        ...
+
+    @abstractmethod
+    def delete(self, id) -> User:
+        ...
+
+    @abstractmethod
+    def exists(self, id=None) -> User:
+        ...
+
+    @abstractmethod
+    def existsByEmail(self, email=None) -> User:
+        ...

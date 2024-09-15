@@ -2,7 +2,7 @@ from app.domain.entities.users.entity import User
 from uuid import uuid4
 
 class UserCreateDto(object):
-    def __init__(self, name: str, email: str, password: str, id: str=None):
+    def __init__(self, name: str, email: str, password: str = None, id: str=None):
         self.id = id if id else str(uuid4())
         self.name = name
         self.email = email
