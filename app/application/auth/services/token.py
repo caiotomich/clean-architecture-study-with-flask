@@ -1,10 +1,11 @@
 import datetime, jwt, os
+from app.domain.entities.users.entity import User
 
 class Token:
     @staticmethod
-    def generate(user):
+    def generate(user: User):
         token = jwt.encode({
-            'user': user.username,
+            'user': user.email,
             'exp': datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(minutes=300)
         }, os.getenv('SECRET_KEY'), algorithm="HS256")
         return token

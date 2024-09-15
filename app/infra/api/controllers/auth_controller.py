@@ -9,10 +9,10 @@ authentication = Blueprint('authentication', __name__)
 def login():
     auth = request.authorization
 
-    if not auth or not auth.username or not auth.password:
+    if not auth or not auth.email or not auth.password:
         return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login Required"'})
 
-    user = UserAuthenticateService.authenticate(auth.username, auth.password)
+    user = UserAuthenticateService.authenticate(auth.email, auth.password)
     if not user:
         return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login Required"'})
 

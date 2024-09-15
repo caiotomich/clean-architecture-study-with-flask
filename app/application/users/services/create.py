@@ -1,4 +1,4 @@
-from app.domain.users.exceptions import UnexpectedError, UserNameCannotBeEmpty, UserEmailNotValid
+from app.domain.entities.users.exceptions import UnexpectedError, UserNameCannotBeEmpty, UserEmailNotValid
 from app.application.users.repository import IUserRepository
 from app.application.users.dto.create_dto import UserCreateDto
 

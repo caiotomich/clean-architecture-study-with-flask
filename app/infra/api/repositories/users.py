@@ -1,7 +1,7 @@
 from app.application.users.repository import IUserRepository
-from app.infrastructure.api.models.users import UserModel
-from app.domain.users.entity import User
-from app.infrastructure.database import db
+from app.infra.api.models.users import UserModel
+from app.domain.entities.users.entity import User
+from app.infra.database import db
 
 class UserRepository(IUserRepository):
     def __init__(self):
@@ -22,7 +22,8 @@ class UserRepository(IUserRepository):
         model = UserModel(
             id=user.id,
             name=user.name,
-            email=user.email
+            email=user.email,
+            email=user.password
         )
         self.db.session.add(model)
         self.db.session.commit()

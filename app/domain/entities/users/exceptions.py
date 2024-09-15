@@ -1,4 +1,4 @@
-from app.domain.users.enums import UserErrorMessagesEnum
+from app.domain.entities.users.enums import UserErrorMessagesEnum
 
 class UnexpectedError(Exception):
     def __init__(self, message=None):

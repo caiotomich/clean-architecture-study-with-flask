@@ -1,4 +1,4 @@
-from app.domain.users.exceptions import UnexpectedError, UserNotFound
+from app.domain.entities.users.exceptions import UnexpectedError, UserNotFound
 from app.application.users.repository import IUserRepository
 
 class UserDelete:

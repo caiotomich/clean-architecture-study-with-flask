@@ -1,14 +1,14 @@
-from app.domain.entities.user import User
+from app.domain.entities.users.entity import User
 
 # In-memory user "database"
 USERS_DB = {
-    "user": User(username="user", password="password")
+    "user": User(id="uuid", name="user test", email="user@email.com", password="bcrypt_password")
 }
 
 class UserAuthenticateService:
     @staticmethod
-    def execute(username, password):
-        user = USERS_DB.get(username)
+    def execute(email, password):
+        user = USERS_DB.get(email)
         if user and user.check_password(password):
             return user
         return None

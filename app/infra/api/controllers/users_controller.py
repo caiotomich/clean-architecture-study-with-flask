@@ -26,9 +26,10 @@ def create():
     data = request.get_json()
     name = data.get('name')
     email = data.get('email')
+    password = data.get('password')
 
     try:
-        user_dto = UserCreateDto(name=name, email=email)
+        user_dto = UserCreateDto(name=name, email=email, password=password)
         user = UserCreate(UserRepository()).execute(user_dto)
 
         return jsonify({
