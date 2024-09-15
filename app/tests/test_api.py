@@ -1,4 +1,4 @@
-from app.infrastructure.api.api import create_app
+from app.infra.api.app import create_app
 from app.config.test import TestConfig
 import unittest
 import json

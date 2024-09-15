@@ -1,6 +1,6 @@
 import unittest
-from app.infrastructure.api.api import create_app, db
-from app.infrastructure.api.models.users import UserModel
+from app.infra.api.app import create_app, db
+from app.infra.api.models.users import UserModel
 from app.config.test import TestConfig
 from app.domain.users.enums import UserErrorMessagesEnum
 import json
