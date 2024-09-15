@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, make_response
 from app.infra.api.middlewares.auth_decorator import protected
-from app.application.auth.services.token import AuthToken
+from app.application.auth.services.token import Token
 from app.application.users.services.authenticate import UserAuthenticateService
 
 authentication = Blueprint('authentication', __name__)
@@ -16,7 +16,7 @@ def login():
     if not user:
         return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login Required"'})
 
-    token = AuthToken.generate(user)
+    token = Token.generate(user)
     return jsonify({'token': token})
 
 @authentication.route('/authcheck', methods=['GET'])

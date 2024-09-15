@@ -23,7 +23,7 @@ class UserRepository(IUserRepository):
             id=user.id,
             name=user.name,
             email=user.email,
-            email=user.password
+            password=user.password
         )
         self.db.session.add(model)
         self.db.session.commit()

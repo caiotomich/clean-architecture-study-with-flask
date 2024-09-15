@@ -1,4 +1,4 @@
-from app.infrastructure.database import db
+from app.infra.database import db
 import uuid
 
 class UserModel(db.Model):
